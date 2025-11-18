@@ -1,0 +1,3 @@
+bin/*
+
+!bin/dj_config.txt
