@@ -46,6 +46,15 @@ AudioTrack::AudioTrack(const AudioTrack& other)
     std::cout << "AudioTrack copy constructor called for: " << other.title << std::endl;
     #endif
     // Your code here...
+    title = other.title;
+    artists = other.artists;
+    duration_seconds = other.duration_seconds;
+    bpm = other.bpm;  
+    waveform_size = other.waveform_size;
+    waveform_data = new double[waveform_size];
+    for (size_t i = 0; i < waveform_size; ++i) {
+        waveform_data[i] = other.waveform_data[i];
+    }
 }
 
 AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
