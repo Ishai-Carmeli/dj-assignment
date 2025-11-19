@@ -18,6 +18,13 @@
  * 
  */
 class AudioTrack {
+private:
+    /**
+     * @param other: reference to other AudioTrack object.
+     * @brief This utility function overides this data with a deep copy of other data.
+     */
+    void deep_copy(const AudioTrack& other);
+
 protected:
     std::string title;
     std::vector<std::string> artists;
