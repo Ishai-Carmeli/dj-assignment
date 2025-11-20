@@ -26,6 +26,9 @@ protected:
     double* waveform_data;  // Dynamic array for audio analysis
     size_t waveform_size;   // Size of the waveform array
 
+private:
+    void deep_copy(const AudioTrack& other);
+
 public:
     /**
      * Constructor - initializes basic track information
