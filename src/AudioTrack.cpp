@@ -82,6 +82,16 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
     std::cout << "AudioTrack move assignment called for: " << other.title << std::endl;
     #endif
     // Your code here...
+    if (this != &other) {
+        delete waveform_data;
+        title = other.title;
+        artists = other.artists;
+        duration_seconds = other.duration_seconds;
+        bpm = other.bpm;
+        waveform_data = other.waveform_data;
+        waveform_size = other.waveform_size;
+        other.waveform_data = nullptr;
+    }
     return *this;
 }
 
