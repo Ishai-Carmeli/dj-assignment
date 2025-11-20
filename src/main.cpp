@@ -81,7 +81,19 @@ void test_phase_2_rule_of_5() {
         std::cout << "\nTesting move constructor..." << std::endl;
         MP3Track moved = std::move(original);  // Should call move constructor
 
-        std::cout << "Moved: " << moved.get_title() << std::endl;
+        std::cout << "Moved (Constructor): " << moved.get_title() << std::endl;
+
+        std::cout << "\nTesting move assignment operator..." << std::endl;
+        MP3Track original1("New Track", {"Test Artist"}, 200, 128, 256);
+
+        moved = std::move(original1);
+
+        std::cout << "Moved (Operator): " << moved.get_title() << std::endl;
+
+        std::cout << "\nTesting self move assignment operator..." << std::endl;
+        moved = std::move(moved);
+        
+        std::cout << "Moved Self (Operator): " << moved.get_title() << std::endl;
 
         std::cout << "Phase 2 test complete!\n" << std::endl;
 
