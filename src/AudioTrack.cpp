@@ -66,6 +66,13 @@ AudioTrack::AudioTrack(AudioTrack&& other) noexcept {
     std::cout << "AudioTrack move constructor called for: " << other.title << std::endl;
     #endif
     // Your code here...
+    title = other.title;
+    artists = other.artists;
+    duration_seconds = other.duration_seconds;
+    bpm = other.bpm;
+    waveform_data = other.waveform_data;
+    waveform_size = other.waveform_size;
+    other.waveform_data = nullptr;
 }
 
 AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
