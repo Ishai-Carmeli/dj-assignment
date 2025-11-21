@@ -1,6 +1,8 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <limits>
+
 
 // Include all our classes
 #include "AudioTrack.h"
@@ -84,13 +86,32 @@ void test_phase_2_rule_of_5() {
         std::cout << "Moved (Constructor): " << moved.get_title() << std::endl;
 
         std::cout << "\nTesting move assignment operator..." << std::endl;
-        MP3Track original1("New Track", {"Test Artist"}, 200, 128, 256);
+        MP3Track original1("New Track", {"Test Artist"}, 200, 128, 256, false);
     
         moved = std::move(original1);
         
-        original1.load();
-        original1.analyze_beatgrid();
-        std::cout << "MP3Track SCORE: " << original1.get_quality_score() << std::endl;
+        moved.load();
+        moved.analyze_beatgrid();
+        std::cout << "MP3Track SCORE: " << moved.get_quality_score() << std::endl;
+
+        std::cout << "\nTesting: mp3 object with max integers..." << std::endl;
+        
+        int imax1 = std::numeric_limits<int>::max();            
+        MP3Track largestMP3("Heavy mp3 track", {"Ishai"}, imax1, imax1, 320, true);
+        largestMP3.load();
+        largestMP3.analyze_beatgrid(); // Should print: about 76861433318333918 estimated beats, 1 precision factor
+
+        std::cout << "MP3Track SCORE: " << largestMP3.get_quality_score() << std::endl;
+
+        std::cout << "\nTesting: wave object with max integers..." << std::endl;
+
+        int imax = std::numeric_limits<int>::max();            
+        WAVTrack largest("Heavy track", {"Ishai"}, imax, imax, imax, imax);
+
+        largest.load();
+        largest.analyze_beatgrid(); // Should print: about 76,861,433,568,873,676 estimated beats, 6,710,886.3 precision factor
+
+        std::cout << "WAVTrack SCORE: " << largest.get_quality_score() << std::endl;
 
         //AudioTrack* tamir = new WAVTrack("Tamir WAV Track", {"abc"}, 645, 128, 44100, 16);
         //(*tamir).load();
