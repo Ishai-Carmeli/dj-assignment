@@ -85,8 +85,21 @@ void test_phase_2_rule_of_5() {
 
         std::cout << "\nTesting move assignment operator..." << std::endl;
         MP3Track original1("New Track", {"Test Artist"}, 200, 128, 256);
-
+    
         moved = std::move(original1);
+        
+        original1.load();
+        original1.analyze_beatgrid();
+        std::cout << "MP3Track SCORE: " << original1.get_quality_score() << std::endl;
+
+        //AudioTrack* tamir = new WAVTrack("Tamir WAV Track", {"abc"}, 645, 128, 44100, 16);
+        //(*tamir).load();
+
+        WAVTrack dalva("Dalva WAV Track", {"abc"}, 645, 128, 44100, 16);
+        dalva.load();
+        dalva.analyze_beatgrid();
+        std::cout << "WAVTrack SCORE: " << dalva.get_quality_score() << std::endl;
+
 
         std::cout << "Moved (Operator): " << moved.get_title() << std::endl;
 
