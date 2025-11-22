@@ -15,9 +15,9 @@
     // Disable inline suggestions and completions from AI
     "editor.inlineSuggest.enabled": false,
     "editor.quickSuggestions": {
-        "other": false,
+        "other": true,
         "comments": false,
-        "strings": false
+        "strings": true
     },
     
     // Disable snippets that might use AI
@@ -102,11 +102,13 @@
     },
     
     // Editor settings for academic integrity
-    "editor.acceptSuggestionOnCommitCharacter": false,
-    "editor.acceptSuggestionOnEnter": "off",
+    "editor.acceptSuggestionOnCommitCharacter": true,
+    "editor.acceptSuggestionOnEnter": "on",
     "editor.tabCompletion": "off",
-    "editor.wordBasedSuggestions": "off",
-    "editor.suggest.showWords": false,
+    "editor.wordBasedSuggestions": "allDocuments",
+    "editor.suggest.showWords": true,
+
+    "editor.suggestOnTriggerCharacters": true,
     
     // Disable telemetry and online features
     "telemetry.telemetryLevel": "off",
