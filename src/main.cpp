@@ -240,10 +240,29 @@ int main(int argc, char* argv[]) {
         
         // Test each phase individually
         //test_phase_1_memory_leaks();
-        test_phase_2_rule_of_5();
+        //test_phase_2_rule_of_5();
         //test_phase_3();
         //demonstrate_polymorphism();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
+
+
+        SessionFileParser parser;
+        SessionConfig config;
+
+        if (!parser.parse_config_file("bin/dj_config.txt", config)) {
+            std::cout << "[ERROR] Failed to load dj_config.txt\n";
+            return 1;
+        }
+
+        std::cout << "[OK] dj_config.txt loaded successfully!\n";
+        std::cout << "App Name: " << config.app_name << "\n";
+        std::cout << "Version: " << config.version << "\n";
+        std::cout << "Tracks loaded: " << config.library_tracks.size() << "\n";
+        std::cout << "Playlists loaded: " << config.playlists.size() << "\n\n";
+
+        DJLibraryService library;
+        library.buildLibrary(config.library_tracks);
+
     }
     return 0;
 }

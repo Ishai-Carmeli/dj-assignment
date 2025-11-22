@@ -13,7 +13,7 @@
     },
     
     // Disable inline suggestions and completions from AI
-    "editor.inlineSuggest.enabled": false,
+    "editor.inlineSuggest.enabled": true,
     "editor.quickSuggestions": {
         "other": true,
         "comments": false,
@@ -100,6 +100,14 @@
         "variant": "cpp",
         "format": "cpp"
     },
+
+
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "editor.suggest.showKeywords": true,
+    "editor.suggest.showSnippets": true,
+
+
     
     // Editor settings for academic integrity
     "editor.acceptSuggestionOnCommitCharacter": true,
