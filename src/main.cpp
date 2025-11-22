@@ -155,6 +155,7 @@ void test_phase_3() {
 
         // Test move operations
         std::cout << "\nTesting move operations..." << std::endl;
+        smart_track = std::move(smart_track);
         PointerWrapper<MP3Track> moved_track = std::move(smart_track);
         std::cout << "Original pointer after move: " << (smart_track ? "still valid" : "null") << std::endl;
         std::cout << "Moved pointer: " << (moved_track ? "valid" : "null") << std::endl;
@@ -174,7 +175,8 @@ void test_phase_3() {
 
         // Manual cleanup since we released
         delete raw_ptr;
-
+        PointerWrapper<MP3Track> smart_track_2(new MP3Track("Smart Track 2", {"AI Artist"}, 240, 130, 320));
+        
         std::cout << "Phase 3 test complete!\n" << std::endl;
 
     } catch (const std::exception& e) {
