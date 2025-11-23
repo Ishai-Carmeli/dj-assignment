@@ -209,6 +209,19 @@ void demonstrate_polymorphism() {
         std::cout << std::endl;
     }
 }
+
+void test_library() {
+    SessionFileParser parser = SessionFileParser();
+    SessionConfig config = SessionConfig();
+    DJLibraryService library = DJLibraryService();
+    bool parsed = parser.parse_config_file("./input_2/dj_config.txt", config);
+    if (parsed) {
+        library.buildLibrary(config.library_tracks);
+        library.loadPlaylistFromIndices("armin_van_buuren_ASOT_1250", config.playlists["armin_van_buuren_ASOT_1250"]);
+    //    std::cout << &config.library_tracks << std::endl;
+    }
+}
+
 int main(int argc, char* argv[]) {    
     /**
      * Command-line argument parsing
@@ -240,9 +253,10 @@ int main(int argc, char* argv[]) {
         
         // Test each phase individually
         //test_phase_1_memory_leaks();
-        test_phase_2_rule_of_5();
+        // test_phase_2_rule_of_5();
         //test_phase_3();
         //demonstrate_polymorphism();
+        test_library();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
     }
     return 0;
