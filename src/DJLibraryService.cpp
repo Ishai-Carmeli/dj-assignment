@@ -91,10 +91,31 @@ AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
     // Your implementation here
-    // For now, add a placeholder to fix the linker error
-    (void)playlist_name;  // Suppress unused parameter warning
-    (void)track_indices;  // Suppress unused parameter warning
+    std::cout << "[INFO] Loading playlist: " << playlist_name << std::endl;
+    playlist = Playlist(playlist_name);
+    for (int const index: track_indices) {
+        if (index < 1 || static_cast<size_t>(index) > library.size()) {
+            std::cout << "[WARNING] Invalid track index: " << index << std::endl; 
+            return;
+        }
+
+        PointerWrapper<AudioTrack> track = library[index - 1]->clone();
+        AudioTrack* track_pointer = track.release();
+
+        if (track_pointer == nullptr) {
+            std::cerr << "[ERROR] Can't create playlist from nullptr tracks" << std::endl;
+            return;
+        }
+
+        track_pointer->load();
+        track_pointer->analyze_beatgrid();
+        playlist.add_track(track_pointer);
+        std::cout << "Added " << track_pointer->get_title() << " to playlist " << playlist_name << std::endl; 
+    }
+
+    std::cout << "[INFO] Playlist loaded: " << playlist_name << " (" << playlist.get_track_count() << " tracks)" << std::endl;
 }
+
 /**
  * TODO: Implement getTrackTitles method
  * @return Vector of track titles in the playlist
