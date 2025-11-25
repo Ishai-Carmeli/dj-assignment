@@ -263,6 +263,8 @@ int main(int argc, char* argv[]) {
         DJLibraryService library;
         library.buildLibrary(config.library_tracks);
 
+        library.loadPlaylistFromIndices("Tamir's Playlist", {1, 2, 3, 7});
+
     }
     return 0;
 }
