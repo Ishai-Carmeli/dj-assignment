@@ -92,7 +92,8 @@ Playlist& DJLibraryService::getPlaylist() {
  */
 AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
     // Your implementation here
-    return nullptr; // Placeholder
+    AudioTrack* track = playlist.find_track(track_title);
+    return track;
 }
 
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
