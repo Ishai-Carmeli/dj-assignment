@@ -265,6 +265,14 @@ int main(int argc, char* argv[]) {
 
         library.loadPlaylistFromIndices("Tamir's Playlist", {1, 2, 3, 7});
 
+        //std::cout << "============================: " << library.findTrack("Silence")->get_artists()[1] << "\n\n";
+
+        std::vector<std::string> titles = library.getTrackTitles();
+        for (std::string title : titles) {
+            std::cout << title << " | ";
+        }
+        std::cout << "\n";
+
     }
     return 0;
 }
