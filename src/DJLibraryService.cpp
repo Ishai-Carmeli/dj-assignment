@@ -93,7 +93,7 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
             PointerWrapper<AudioTrack> my_cloned_track = my_track->clone();
             AudioTrack* unwrapped_track = my_cloned_track.release();
             if (unwrapped_track == nullptr){
-                std::cout << "[ERROR] Cloned track pointer is a nullptr " << index << std::endl;
+                std::cout << "[ERROR] Cloned track pointer is a nullptr " << std::endl;
             }
             else{
                 unwrapped_track->load();

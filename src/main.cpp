@@ -273,6 +273,18 @@ int main(int argc, char* argv[]) {
         }
         std::cout << "\n";
 
+
+        
+        AudioTrack* t1 = new MP3Track("tami", {"Petit Biscuit"}, 180, 120, 320);
+        AudioTrack* t2 = new WAVTrack("dal", {"Deadmau5"}, 645, 128, 44100, 16);
+        DJControllerService contr(2);
+        contr.loadTrackToCache(*t1);
+        contr.loadTrackToCache(*t2);
+
+        std::cout << "get get get: \"" << contr.getTrackFromCache("tami")->get_artists().at(0) << "\" \n\n";
+
+
+
     }
     return 0;
 }
