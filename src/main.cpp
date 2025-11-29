@@ -214,11 +214,22 @@ void test_library() {
     SessionFileParser parser = SessionFileParser();
     SessionConfig config = SessionConfig();
     DJLibraryService library = DJLibraryService();
-    bool parsed = parser.parse_config_file("./input_2/dj_config.txt", config);
+    bool parsed = parser.parse_config_file("./bin/dj_config.txt", config);
     if (parsed) {
         library.buildLibrary(config.library_tracks);
-        library.loadPlaylistFromIndices("armin_van_buuren_ASOT_1250", config.playlists["armin_van_buuren_ASOT_1250"]);
-    //    std::cout << &config.library_tracks << std::endl;
+        library.loadPlaylistFromIndices("test_playlist", config.playlists["test_playlist"]);
+        AudioTrack* foundTrack = library.findTrack("For An Angel");
+        std::cout << "Found! " << foundTrack->get_title() << std::endl;
+        AudioTrack* foundTrack2 = library.findTrack("Doesn't exists");
+        std::cout << "Found! " << foundTrack2 << std::endl;
+        
+        std::cout << "Starting test: getTrackTitles()" << std::endl;
+        std::vector<std::string> titles = library.getTrackTitles();
+        std::cout << "All tracks in playlist: " << std::endl;
+        for (std::string& title: titles) {
+            std::cout << title << std::endl;
+        }
+        std::cout << "Complete test: getTrackTitles()" << std::endl;
     }
 }
 
