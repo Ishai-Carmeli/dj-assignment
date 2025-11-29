@@ -10,6 +10,11 @@ MixingEngineService::MixingEngineService()
     : active_deck(0)
 {
     // Your implementation here
+    decks[0] = nullptr;
+    decks[1] = nullptr;
+    auto_sync = false;
+    bpm_tolerance = 0;
+    std::cout << "[MixingEngineService] Initialized with 2 empty decks.\n";
 }
 
 /**
@@ -17,6 +22,13 @@ MixingEngineService::MixingEngineService()
  */
 MixingEngineService::~MixingEngineService() {
     // Your implementation here
+    std::cout << "[MixingEngineService] Cleaning up decks....\n";
+    for (int i = 0; i < 2; i++){
+        if (decks[i] != nullptr){
+            delete decks[i];
+            decks[i] = nullptr;
+        }
+    }
 }
 
 

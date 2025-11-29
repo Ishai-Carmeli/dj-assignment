@@ -283,6 +283,9 @@ int main(int argc, char* argv[]) {
 
         std::cout << "get get get: \"" << contr.getTrackFromCache("tami")->get_artists().at(0) << "\" \n\n";
 
+        delete t1;
+        delete t2;
+
 
 
     }
