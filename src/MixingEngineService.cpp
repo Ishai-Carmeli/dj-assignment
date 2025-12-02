@@ -67,7 +67,7 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     my_cloned_track.get()->analyze_beatgrid();
 
     if (!first_load && auto_sync){
-        if (!can_mix_tracks){
+        if (!can_mix_tracks(my_cloned_track)){
             sync_bpm(my_cloned_track);    
         }
     }

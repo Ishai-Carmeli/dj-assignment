@@ -4,6 +4,12 @@
 LRUCache::LRUCache(size_t capacity)
     : slots(capacity), max_size(capacity), access_counter(0) {}
 
+LRUCache::~LRUCache() {
+    for (size_t i = 0; i < max_size; i++){
+        slots[i].clear();
+    }
+}
+
 bool LRUCache::contains(const std::string& track_id) const {
     return findSlot(track_id) != max_size;
 }

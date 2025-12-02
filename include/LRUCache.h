@@ -33,6 +33,8 @@ public:
      */
     explicit LRUCache(size_t capacity);
     
+    ~LRUCache();
+
     /**
      * @brief Check if cache contains a track
      * @param track_id Track identifier to search for
