@@ -67,13 +67,8 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     my_cloned_track.get()->analyze_beatgrid();
 
     if (!first_load && auto_sync){
-        int cloned_bpm = my_cloned_track.get()->get_bpm();
-        int active_bpm = decks[active_deck]->get_bpm();
-
-        if (std::abs(cloned_bpm - active_bpm) > bpm_tolerance){
-            int new_bpm = (cloned_bpm + active_bpm) / 2;
-            my_cloned_track.get()->set_bpm(new_bpm);
-            std::cout << "[BPM UPDATE] '" << my_cloned_track.get()->get_title() << "' updated to " << new_bpm << std::endl;
+        if (!can_mix_tracks){
+            sync_bpm(my_cloned_track);    
         }
     }
 
@@ -116,6 +111,15 @@ void MixingEngineService::displayDeckStatus() const {
  */
 bool MixingEngineService::can_mix_tracks(const PointerWrapper<AudioTrack>& track) const {
     // Your implementation here
+
+    if (decks[active_deck] == nullptr || track.get() == nullptr){
+        return false;
+    }
+    int track_bpm = track.get()->get_bpm();
+    int active_bpm = decks[active_deck]->get_bpm();
+    if (std::abs(track_bpm - active_bpm) <= bpm_tolerance){
+        return true;
+    }
     return false; // Placeholder
 }
 
@@ -125,4 +129,12 @@ bool MixingEngineService::can_mix_tracks(const PointerWrapper<AudioTrack>& track
  */
 void MixingEngineService::sync_bpm(const PointerWrapper<AudioTrack>& track) const {
     // Your implementation here
+
+    if (decks[active_deck] != nullptr || track.get() != nullptr){
+        int original_bpm = track.get()->get_bpm();
+        int active_bpm = decks[active_deck]->get_bpm();
+        int new_bpm = (original_bpm + active_bpm) / 2;
+        track.get()->set_bpm(new_bpm);
+        std::cout << "[Sync BPM] Syncing BPM from " << original_bpm << " to " << new_bpm << "\n";
+    }
 }
