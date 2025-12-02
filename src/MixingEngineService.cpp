@@ -39,7 +39,56 @@ MixingEngineService::~MixingEngineService() {
  */
 int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     // Your implementation here
-    return -1; // Placeholder
+
+    std::cout << "\n=== Loading Track to Deck ===\n";
+
+    bool first_load = decks[0] == nullptr && decks[1] == nullptr;
+    
+    PointerWrapper<AudioTrack> my_cloned_track = track.clone();
+    if (my_cloned_track.get() == nullptr){
+        std::cout << "[ERROR] Track: \"" << track.get_title() << "\" failed to clone" << std::endl;
+        return -1;
+    }
+
+    int target_deck;
+    if (first_load){
+        target_deck = 0;
+    }
+    else {
+        target_deck = 1 - active_deck;
+        std::cout << "[Deck Switch] Target deck: " << target_deck << std::endl;
+        if (decks[target_deck] != nullptr){
+            delete decks[target_deck];
+            decks[target_deck] = nullptr;
+        }
+    }
+
+    my_cloned_track.get()->load();
+    my_cloned_track.get()->analyze_beatgrid();
+
+    if (!first_load && auto_sync){
+        int cloned_bpm = my_cloned_track.get()->get_bpm();
+        int active_bpm = decks[active_deck]->get_bpm();
+
+        if (std::abs(cloned_bpm - active_bpm) > bpm_tolerance){
+            int new_bpm = (cloned_bpm + active_bpm) / 2;
+            my_cloned_track.get()->set_bpm(new_bpm);
+            std::cout << "[BPM UPDATE] '" << my_cloned_track.get()->get_title() << "' updated to " << new_bpm << std::endl;
+        }
+    }
+
+    AudioTrack* unwrapped_track = my_cloned_track.release();
+    decks[target_deck] = unwrapped_track;
+    std::cout << "[Load Complete] '" << unwrapped_track->get_title() << "' is now loaded on deck " << target_deck << std::endl;
+
+    if (!first_load){
+        std::cout << "[Unload] Unloading previous deck " << active_deck << " (" <<  decks[active_deck]->get_title() << ")" << std::endl;
+        delete decks[active_deck];
+        decks[active_deck] = nullptr;
+    }
+    active_deck = target_deck;
+    std::cout << "[Active Deck] Switched to deck " << target_deck << std::endl;
+    return target_deck; // Placeholder
 }
 
 /**

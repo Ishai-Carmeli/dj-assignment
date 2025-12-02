@@ -112,3 +112,7 @@ void AudioTrack::deep_copy(const AudioTrack& other) {
         waveform_data[i] = other.waveform_data[i];
     }
 }
+
+void AudioTrack::set_bpm(int new_bpm) {
+    bpm = new_bpm;
+}
