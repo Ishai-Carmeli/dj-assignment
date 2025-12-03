@@ -129,6 +129,7 @@ void DJSession::simulate_dj_performance() {
     // 1. Load configuration
     if (!load_configuration()) {
         std::cerr << "[ERROR] Failed to load configuration. Aborting session." << std::endl;
+        stats.errors++;
         return;
     }
     
@@ -138,6 +139,7 @@ void DJSession::simulate_dj_performance() {
     // 3. Get available playlists from config
     if (session_config.playlists.empty()) {
         std::cerr << "[ERROR] No playlists found in configuration. Aborting session." << std::endl;
+        stats.errors++;
         return;
     }
     std::cout << "\nStarting DJ performance simulation..." << std::endl;
