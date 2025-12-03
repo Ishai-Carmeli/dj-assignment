@@ -65,7 +65,6 @@ void Playlist::remove_track(const std::string& title) {
         delete current;
         
         track_count--;
-        delete current;
         std::cout << "Removed '" << title << "' from playlist" << std::endl;
 
     } else {

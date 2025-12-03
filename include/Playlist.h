@@ -21,6 +21,9 @@ struct PlaylistNode {
 
     PlaylistNode(AudioTrack* t) : track(t), next(nullptr) {}
     ~PlaylistNode();
+
+    PlaylistNode(const PlaylistNode&) = delete;
+    PlaylistNode& operator=(const PlaylistNode&) = delete;
 };
 
 class Playlist {
@@ -39,6 +42,9 @@ public:
      * Destructor
      */
     ~Playlist();
+
+    Playlist(const Playlist&) = delete;
+    Playlist& operator=(const Playlist&) = delete;
 
     /**
      * Add a track to the playlist
