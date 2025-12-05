@@ -22,7 +22,7 @@ MixingEngineService::MixingEngineService()
  */
 MixingEngineService::~MixingEngineService() {
     // Your implementation here
-    std::cout << "[MixingEngineService] Cleaning up decks....\n";
+    std::cout << "[MixingEngineService] Cleaning up decks...\n";
     for (int i = 0; i < 2; i++){
         if (decks[i] != nullptr){
             delete decks[i];
@@ -56,12 +56,12 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     }
     else {
         target_deck = 1 - active_deck;
-        std::cout << "[Deck Switch] Target deck: " << target_deck << std::endl;
         if (decks[target_deck] != nullptr){
             delete decks[target_deck];
             decks[target_deck] = nullptr;
         }
     }
+    std::cout << "[Deck Switch] Target deck: " << target_deck << std::endl;
 
     my_cloned_track.get()->load();
     my_cloned_track.get()->analyze_beatgrid();
@@ -83,6 +83,7 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     }
     active_deck = target_deck;
     std::cout << "[Active Deck] Switched to deck " << target_deck << std::endl;
+    displayDeckStatus();
     return target_deck; // Placeholder
 }
 
@@ -117,7 +118,7 @@ bool MixingEngineService::can_mix_tracks(const PointerWrapper<AudioTrack>& track
     }
     int track_bpm = track.get()->get_bpm();
     int active_bpm = decks[active_deck]->get_bpm();
-    if (std::abs(track_bpm - active_bpm) <= bpm_tolerance){
+    if (std::abs(track_bpm - active_bpm) > bpm_tolerance){
         return true;
     }
     return false; // Placeholder
