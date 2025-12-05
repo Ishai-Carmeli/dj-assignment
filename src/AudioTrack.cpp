@@ -36,7 +36,7 @@ AudioTrack::~AudioTrack() {
     std::cout << "AudioTrack destructor called for: " << title << std::endl;
     #endif
     // Your code here...
-    delete waveform_data;
+    delete[] waveform_data;
 }
 
 AudioTrack::AudioTrack(const AudioTrack& other)
@@ -55,7 +55,7 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     std::cout << "AudioTrack copy assignment called for: " << other.title << std::endl;
     #endif
     // Your code here...
-    delete waveform_data;
+    delete[] waveform_data;
     deep_copy(other);
     return *this;
 }
@@ -83,7 +83,7 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
     #endif
     // Your code here...
     if (this != &other) {
-        delete waveform_data;
+        delete[] waveform_data;
         title = other.title;
         artists = other.artists;
         duration_seconds = other.duration_seconds;
