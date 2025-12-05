@@ -233,6 +233,66 @@ void test_library() {
     }
 }
 
+void test_lru_cache() {
+    std::cout << "----------- Starting test: LRU cache ------------" << std::endl;
+    std::cout << "Starting system startup...." << std::endl;
+    SessionFileParser parser = SessionFileParser();
+    SessionConfig config = SessionConfig();
+    DJLibraryService library = DJLibraryService();
+    bool parsed = parser.parse_config_file("./bin/dj_config.txt", config);
+
+    if (parsed) {
+        library.buildLibrary(config.library_tracks);
+        library.loadPlaylistFromIndices("test_playlist", config.playlists["test_playlist"]);
+    }
+    
+    std::cout << "Finished system startup" << std::endl;
+
+    std::cout << "Starting test: put()" << std::endl;
+    LRUCache cache(config.controller_cache_size);
+    for (AudioTrack* track: library.getPlaylist().getTracks()) {
+        bool put = cache.put(track->clone());
+        std::cout << "Has put: " << put  << std::endl; // should be false
+    }
+    std::cout << "Finished test: put()" << std::endl;
+    std::cout << "Starting test: evictLRU() && findLRUSlot()" << std::endl;
+    std::cout << "Evicted: " << cache.evictLRU() << std::endl; // true
+    std::cout << "Evicted: " << cache.evictLRU() << std::endl; // false
+    std::cout << "Finished test: evictLRU() && findLRUSlot()" << std::endl;
+}
+
+void test_controller() {
+    std::cout << "\n\n----------- Starting test: DJ Controller Service ------------" << std::endl;
+    std::cout << "Starting system startup...." << std::endl;
+    SessionFileParser parser = SessionFileParser();
+    SessionConfig config = SessionConfig();
+    DJLibraryService library = DJLibraryService();
+    bool parsed = parser.parse_config_file("./bin/dj_config.txt", config);
+
+    if (parsed) {
+        library.buildLibrary(config.library_tracks);
+        library.loadPlaylistFromIndices("test_playlist", config.playlists["test_playlist"]);
+    }
+
+    std::cout << "Finished system startup" << std::endl;
+    std::cout << "\nStarting test: loadTrackToCache()" << std::endl;
+    DJControllerService controller(config.controller_cache_size);
+    for (AudioTrack* track: library.getPlaylist().getTracks()) {
+        int put = controller.loadTrackToCache(*track);
+        std::cout <<  track->get_title() << " MISS/HIT: " << put << std::endl;
+    }
+
+    std::cout << "Finished test: loadTrackToCache()" << std::endl;
+    
+    std::cout << "\nStarting test: getTrackFromCache()" << std::endl;
+    AudioTrack* cached_track_1 = controller.getTrackFromCache("IDK");
+    std::cout << "Got nullptr track: " << cached_track_1 << std::endl;
+    AudioTrack* cached_track_2 = controller.getTrackFromCache("Silence");
+    std::cout << "Got actual track: " << cached_track_2->get_title() << std::endl;
+    std::cout << "Finished test: getTrackFromCache()" << std::endl;
+
+}
+
 int main(int argc, char* argv[]) {    
     /**
      * Command-line argument parsing
@@ -267,7 +327,9 @@ int main(int argc, char* argv[]) {
         // test_phase_2_rule_of_5();
         //test_phase_3();
         //demonstrate_polymorphism();
-        test_library();
+        // test_library();
+        // test_lru_cache();
+        test_controller();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
     }
     return 0;
