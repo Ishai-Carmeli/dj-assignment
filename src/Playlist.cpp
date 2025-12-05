@@ -22,6 +22,62 @@ Playlist::~Playlist() {
     head = nullptr;
 }
 
+Playlist::Playlist(const Playlist& other)
+    : head(nullptr),
+      playlist_name(other.playlist_name),
+      track_count(other.track_count)
+{
+    if (!other.head) return;
+
+    head = new PlaylistNode(other.head->track->clone().release());
+    PlaylistNode* curr = head;
+    PlaylistNode* other_curr = other.head->next;
+
+    while (other_curr) {
+        curr->next = new PlaylistNode(other_curr->track->clone().release());
+        curr = curr->next;
+        other_curr = other_curr->next;
+    }
+}
+
+Playlist& Playlist::operator=(const Playlist& other) {
+    if (this != &other) {
+        PlaylistNode* node = head;
+        while (node != nullptr) {
+            PlaylistNode* temp = node->next;
+            delete node;
+            node = temp;
+        }
+
+        head = nullptr;
+        playlist_name = other.playlist_name;
+        track_count = other.track_count;
+
+        PlaylistNode* src = other.head;
+        PlaylistNode* dest = nullptr;
+
+        while (src != nullptr) {
+            AudioTrack* new_track = nullptr;
+            if (src->track != nullptr) {
+                new_track = src->track->clone().release();
+            }
+            PlaylistNode* new_node = new PlaylistNode(new_track);
+            if (head == nullptr) {
+                head = new_node;
+            } else {
+                dest->next = new_node;
+            }
+            dest = new_node;
+            src = src->next;
+        }
+    }
+    return *this;
+}
+
+
+
+
+
 PlaylistNode::~PlaylistNode() {
     delete track;
 }
