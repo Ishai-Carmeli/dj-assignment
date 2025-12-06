@@ -104,6 +104,8 @@ public:
      */
     virtual PointerWrapper<AudioTrack> clone() const = 0;
 
+    void set_bpm(int new_bpm) { bpm = new_bpm;}
+
     /**
      * Function to get a copy of the waveform data
      */

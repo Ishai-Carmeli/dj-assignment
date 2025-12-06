@@ -290,7 +290,63 @@ void test_controller() {
     AudioTrack* cached_track_2 = controller.getTrackFromCache("Silence");
     std::cout << "Got actual track: " << cached_track_2->get_title() << std::endl;
     std::cout << "Finished test: getTrackFromCache()" << std::endl;
+    std::cout << "----------- Finished test: DJ Controller Service ------------" << std::endl;
+}
 
+void test_mixing_engine() {
+    std::cout << "\n\n----------- Starting test: Mixing Engine Service ------------" << std::endl;
+    std::cout << "Starting system startup...." << std::endl;
+    SessionFileParser parser = SessionFileParser();
+    SessionConfig config = SessionConfig();
+    DJLibraryService library = DJLibraryService();
+    bool parsed = parser.parse_config_file("./bin/dj_config.txt", config);
+
+    if (parsed) {
+        library.buildLibrary(config.library_tracks);
+        library.loadPlaylistFromIndices("test_playlist", config.playlists["test_playlist"]);
+    }
+
+    MixingEngineService engine = MixingEngineService();
+    engine.set_bpm_tolerance(config.bpm_tolerance);
+    PointerWrapper<AudioTrack> sunset_lover = PointerWrapper<AudioTrack>(new MP3Track("Sunset Lover", {"Petit Biscuit"}, 180, 120, 320));
+    PointerWrapper<AudioTrack> dalva = PointerWrapper<AudioTrack>(new WAVTrack("Dalva WAV Track", {"abc"}, 645, 141, 44100, 16));
+    PointerWrapper<AudioTrack> wow = PointerWrapper<AudioTrack>(new MP3Track("wow", {"Ishai Carmeli"}, 130, 130, 320));
+    PointerWrapper<AudioTrack> idk = PointerWrapper<AudioTrack>(new MP3Track("I don't know", {"Mochito"}, 130, 140, 320));
+
+    std::cout << "Finished system startup" << std::endl;
+
+    std::cout << "\nStarting test: can_mix_tracks()" << std::endl;
+    std::cout << "Should print 0 (false): " << engine.can_mix_tracks(sunset_lover) << std::endl; 
+    PointerWrapper<AudioTrack> invalid;
+    std::cout << "Should print 0 (false): " << engine.can_mix_tracks(invalid) << std::endl;
+    std::cout << "\Finished test: can_mix_tracks()" << std::endl;
+
+    std::cout << "\nStarting test: loadTrackToDeck() && can_mix_tracks()" << std::endl;
+
+    std::cout << "Should print 0 (false): " << engine.can_mix_tracks(sunset_lover) << std::endl; 
+    int res1 = engine.loadTrackToDeck(*(sunset_lover.get())); // load to deck[0]
+    std::cout << "res1: " << res1 << std::endl; // res1: 0
+
+    std::cout << "Should print 0 (false): " << engine.can_mix_tracks(dalva) << std::endl; 
+    int res2 = engine.loadTrackToDeck(*(dalva.get())); // load to deck[1]
+    std::cout << "res2: " << res2 << std::endl; // res1: 1, (+) exceeded tolerance
+    
+    std::cout << "Should print 0 (false): " << engine.can_mix_tracks(wow) << std::endl; 
+    int res3 = engine.loadTrackToDeck(*(wow.get())); // load to deck[0],
+    std::cout << "res3: " << res3 << std::endl; // res1: 0, (-) exceeded tolerance
+
+    std::cout << "Should print 1 (true): " << engine.can_mix_tracks(idk) << std::endl; 
+    int res4 = engine.loadTrackToDeck(*(idk.get())); // load to deck[1], 
+    std::cout << "res4: " << res4 << std::endl; // res1: 1
+    
+    std::cout << "\Finished test: loadTrackToDeck() && can_mix_tracks()" << std::endl;
+
+    std::cout << "\nStarting test: sync_bpm()" << std::endl;
+    engine.sync_bpm(sunset_lover); // Should since with sunset_lover
+    std::cout << "sunset_lover new bpm should be 130: " << sunset_lover.get()->get_bpm() << std::endl;
+    std::cout << "\Finished test: sync_bpm()" << std::endl;
+
+    std::cout << "----------- Finished test: Mixing Engine Service ------------" << std::endl;
 }
 
 int main(int argc, char* argv[]) {    
@@ -323,13 +379,14 @@ int main(int argc, char* argv[]) {
         std::cout << "==================================================" << std::endl;
         
         // Test each phase individually
-        //test_phase_1_memory_leaks();
+        // test_phase_1_memory_leaks();
         // test_phase_2_rule_of_5();
-        //test_phase_3();
-        //demonstrate_polymorphism();
+        // test_phase_3();
+        // demonstrate_polymorphism();
         // test_library();
         // test_lru_cache();
-        test_controller();
+        // test_controller();
+        test_mixing_engine();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
     }
     return 0;
